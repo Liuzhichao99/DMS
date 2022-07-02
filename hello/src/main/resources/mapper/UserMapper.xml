@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hello.dao.UserDao">
+    <resultMap id="baseMap" type="user">
+        <result column="id" property="id"></result>
+        <result column="username" property="username"></result>
+        <result column="password" property="password"></result>
+        <result column="sex" property="sex"></result>
+        <result column="age" property="age"></result>
+        <result column="phone" property="phone"></result>
+        <result column="email" property="email"></result>
+    </resultMap>
+
+    <select id="findAllUser" resultMap="baseMap">
+      select * from user
+    </select>
+
+    <select id="findUserRole" parameterType="String" resultType="Role">
+           select role.*  from user_role,role
+           where user_role.userId=#{userId} and user_role.roleId=role.id
+    </select>
+
+    <select id="getPartUsers" parameterType="String"  resultMap="baseMap">
+        select * from user where username like "%"#{message}"%"
+    </select>
+
+    <insert id="insertUser" parameterType="User">
+        insert into user values (#{id},#{username},#{password},#{sex},#{age},#{phone},#{email})
+    </insert>
+
+    <insert id="addUserRole">
+        insert into user_role values(#{userId},#{roleId})
+    </insert>
+
+    <select id="checkName" parameterType="User" resultMap="baseMap">
+         select * from user where username=#{username}
+    </select>
+
+    <select id="findUserById" parameterType="String"  resultMap="baseMap">
+        select * from user where id=#{id}
+    </select>
+
+    <update id="updateUser" parameterType="User">
+        update  user set username=#{username},sex=#{sex}
+        ,age=#{age},phone=#{phone},email=#{email} where id=#{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="String">
+        delete from user where id=#{id}
+    </delete>
+
+    <delete id="deleteUserRole" parameterType="String">
+        delete from user_role where userId=#{userId}
+    </delete>
+</mapper>
